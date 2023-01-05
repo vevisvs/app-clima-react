@@ -5,12 +5,12 @@ import Header from './componentes/Header'
 function App() {
 
   return (
-    <div className="App">
-      <ClimaProvider>
+    <ClimaProvider>
+      <div className="App">
         <Header />
         <Home />
-      </ClimaProvider>
-    </div>
+      </div>
+    </ClimaProvider>
   )
 }
 

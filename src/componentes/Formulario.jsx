@@ -1,6 +1,6 @@
 import React from 'react'
 import { useContext } from 'react'
-import ClimaContext from '../context/ClimaContext'
+import { ClimaContext } from '../context/ClimaContext'
 import {useState} from 'react'
 
 const Formulario = () => {
@@ -14,6 +14,7 @@ const Formulario = () => {
             setMessage('Todos los campos son obligatorios')
             return
         }
+        setMessage('')
         consulta(search)
     }
 

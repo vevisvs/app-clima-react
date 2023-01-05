@@ -1,10 +1,10 @@
 import {useState, createContext} from 'react'
 import axios from 'axios'
 
-export const ClimaContext = createContext()
+export const ClimaContext = createContext() //creo el contexto
 
 export const ClimaProvider = ({children}) => {
-    //console.log(import.meta.env.VITE_API_KEY) mostrar en consola la api key
+    //console.log(import.meta.env.VITE_API_KEY) esto muestra en consola la api-key
 
     const [search, setSearch] = useState({ //data inicial o por defecto (inputs vacios)
         ciudad: '',
@@ -12,6 +12,8 @@ export const ClimaProvider = ({children}) => {
     })
 
     const [results, setResults] = useState({})
+    const [load, setLoad] = useState(false)
+    const [error, setError] = useState(false)
 
     //esta función toma los datos de la búsqueda
     const dataSearch = (e) => {
@@ -20,7 +22,9 @@ export const ClimaProvider = ({children}) => {
 
     //esta es la funcion de consulta que se conectará con la api del clima:
     const consulta = async datos => {
+        setLoad(true)
         try {
+            //se realizan 2 consultas a la api
             const { ciudad, pais } = datos
             const idAplication = import.meta.env.VITE_API_KEY
             const url = `http://api.openweathermap.org/geo/1.0/direct?q=${ciudad},${pais}&limit=1&appid=${idAplication}`
@@ -29,18 +33,16 @@ export const ClimaProvider = ({children}) => {
             const clima = `http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${idAplication}`
             const { data: climaApp } = await axios(clima)
             setResults(climaApp)
-            //se realizan 2 consultas a la api
         } catch (error){
-            console.log(error)
+            setError('Ingrese un nombre de ciudad válido')
         }
-        
+        setLoad(false)
     }
 
     return(
-        <ClimaContext.Provider value={{search, dataSearch, consulta, results}}>
+        <ClimaContext.Provider value={{search, dataSearch, consulta, results, error, load}}>
             {children}
         </ClimaContext.Provider>
     )
 }
 
-export default ClimaContext
